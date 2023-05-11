@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+{% if offers %}
+
+<div class="col-md-8">
+    <div class="list-group">
+        {% for offer in offers %}
+        <a href="{% url 'offer_current' offer.id %}"
+           class="list-group-item list-group-item-action"
+           aria-current="true">
+            <h4><strong>Контракт №{{ offer.id }}</strong></h4>
+            <p class="mb-1"><strong>Контрагент</strong>: {{ offer.contract.profile }}
+            </p>
+            <p class="mb-1"><strong>Договор</strong>: {{ offer.contract.name }}</p>
+            <p class="mb-1"><strong>Статус</strong>: {{ offer.get_status_display }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

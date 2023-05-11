@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+<div class="col-md-2">
+    {% if agent_id %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'current_agent' agent_id %}">Назад</a>
+    {% else %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'offers' %}">Назад</a>
+    {% endif %}
+</div>
+<div class="col-md-8">
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Контракт№{{ current.id }}</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Контрагент: {{ current.contract.profile.org }}</li>
+                <li class="list-group-item">Адрес: {{ current.contract.profile.address }}</li>
+                <li class="list-group-item">Представитель: {{ current.contract.profile.user }}</li>
+                <li class="list-group-item">Договор: {{ current.contract }}</li>
+                {% if current.contract.file %}
+                <li class="list-group-item">Файл договора: <a href="{{ current.contract.file.url }}" download>
+                    {{ current.contract.file|default:'' }}
+                </a></li>
+                {% else %}
+                <li class="list-group-item">Файл договора:</li>
+                {% endif %}
+                {% if current.contract.services.all %}
+                <li class="list-group-item">Услуги:
+                   <ul> {% for srv in current.contract.services.all %} <li>{{ srv }}</li>
+                    {% endfor %}</ul>
+                </li>
+                {% else %}
+                <li class="list-group-item">Услуги:</li>
+                {% endif %}
+                <li class="list-group-item">Ответственный: {{ current.created_by }}</li>
+                <li class="list-group-item">Создан: {{ current.created_on }}</li>
+                <li class="list-group-item">Отправлено клиенту: {{ current.send_on|default:'' }}</li>
+                <li class="list-group-item">Статус: {{ current.get_status_display }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'app_send' current.id %}">Отправить контрагенту</a>
+        <a class="btn btn-danger" role="button"
+           href="{% url 'app_update' current.id %}">Расторгнуть контракт</a>
+    </div>
+</div>
+
+{% endblock %}

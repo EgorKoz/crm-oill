@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+{% if appeals %}
+
+<div class="col-md-8">
+    <div class="list-group">
+        {% for appeal in appeals %}
+        <a href="{% url 'appeal_current' appeal.id %}"
+           class="list-group-item list-group-item-action"
+           aria-current="true">
+            <h4><strong>Обращение№{{ appeal.id }}</strong></h4>
+            <p class="mb-1"><strong>Контрагент</strong>: {{ appeal.client }}</p>
+            <p class="mb-1"><strong>Тема</strong>: {{ appeal.get_topic_display }}</p>
+            <p class="mb-1"><strong>Дата создания</strong>: {{ appeal.created_on }}</p>
+            <p class="mb-1"><strong>Статус</strong>: {{ appeal.get_status_display }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+<div class="col-md-4">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'appeal_create' %}">Создать обращение</a>
+    </div>
+</div>
+
+
+
+{% endblock %}

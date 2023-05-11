@@ -1,0 +1,52 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+<div class="col-md-2">
+    <a class="btn btn-dark" role="button"
+       href="{% url 'app_current' current.id %}">Назад</a>
+</div>
+<div class="col-md-6">
+    {% if current.appeal %}
+    <div class="mb-3">
+        <label for="appeal" class="form-label">Заявка по обращению</label>
+        <input type="text" class="form-control" id="appeal"
+               value="{{ current.appeal }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="topic" class="form-label">Тип заявки</label>
+        <input type="text" class="form-control" id="topic"
+               value="{{ current.appeal.get_topic_display }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="client" class="form-label">Контрагент</label>
+        <input type="text" class="form-control" id="client"
+               value="{{ current.appeal.client }}" readonly>
+    </div>
+    <div class="mb-3">
+        <label for="comment" class="form-label">Комментарий</label>
+        <textarea class="form-control" id="comment"
+               readonly>{{ current.appeal.comment }}</textarea>
+    </div>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_app.as_p }}
+        {{ form_ctr.as_p }}
+        <div align="center">
+            <button class="btn btn-primary" type="submit">Обновить</button>
+        </div>
+    </form>
+</div>
+<div class="col-md-4">
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form_srv.as_p }}
+        <div align="center">
+            <button class="btn btn-primary" type="submit">Добавить услуги
+            </button>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

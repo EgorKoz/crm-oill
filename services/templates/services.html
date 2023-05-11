@@ -1,0 +1,27 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+{% if services %}
+
+<div class="col-md-8">
+    <div class="list-group">
+        {% for service in services %}
+        <li
+           class="list-group-item list-group-item-action"
+           aria-current="true">
+            <h4><strong>Услуга №{{ service.id }}</strong></h4>
+            <p class="mb-1"><strong>Описание</strong>: {{ service }}</p>
+        </li>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %}
+<div class="col-md-4">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'create_service' %}">Добавить услугу</a>
+    </div>
+</div>
+{% endblock %}

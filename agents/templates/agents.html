@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+
+
+<div class="col-md-8">
+    <form method="get">
+        {{ filter.form }}
+        <div align="center">
+            <button class="btn btn-primary" type="submit">Найти</button>
+        </div>
+    </form>
+    {% if agents %}
+    <div class="list-group">
+        {% for agent in agents %}
+        <a href="{% url 'current_agent' agent.id %}"
+           class="list-group-item list-group-item-action"
+           aria-current="true">
+            <h4><strong>Организация</strong>: {{ agent.org.name }}</h4>
+            <p class="mb-1"><strong>Представитель</strong>: {{ agent.user }}
+            </p>
+            <p class="mb-1"><strong>Email</strong>: {{ agent.user.email }}</p>
+            <p class="mb-1"><strong>Адрес</strong>: {{ agent.address }}</p>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="col-md-4">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'create_profile' %}">Добавить профиль контрагента</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'create_user' %}">Добавить представителя
+            организации</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'create_org' %}">Добавить организацию</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'create_address' %}">Добавить адрес</a>
+    </div>
+</div>
+
+
+{% endblock %}

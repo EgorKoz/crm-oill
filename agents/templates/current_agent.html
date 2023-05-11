@@ -1,0 +1,125 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+<div class="col-md-2">
+    <a class="btn btn-dark" role="button"
+       href="{% url 'agents' %}">Назад</a>
+</div>
+<div class="col-md-8">
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Профиль контрагента</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Организация: {{ current.org.name }}
+                </li>
+                <li class="list-group-item">Веб-сайт организации:
+                    {{ current.org.web_site }}
+                </li>
+                <li class="list-group-item">Адрес: {{ current.address }}</li>
+                <li class="list-group-item">Приоритет:
+                    {{ current.get_priority_display }}
+                </li>
+                <li class="list-group-item">Описание: {{ current.description }}
+                </li>
+                <li class="list-group-item">Дата создания:
+                    {{ current.date_joined }}
+                </li>
+                {% if current.is_active%}
+                <li class="list-group-item">Статус активности: Активен</li>
+                {% else%}
+                <li class="list-group-item">Статус активности: Неактивен</li>
+                {% endif%}
+                {% if current.has_sales_access %}
+                <li class="list-group-item">Имеет скидку</li>
+                {% endif%}
+            </ul>
+            <div class="card-header">
+                <h2>Данные представителя организации</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Имя: {{ current.user.first_name }}
+                </li>
+                <li class="list-group-item">Фамилия: {{ current.user.last_name }}
+                </li>
+                <li class="list-group-item">Email: {{ current.user.email }}
+                </li>
+                <li class="list-group-item">Телефон: {{ current.user.phone }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Предыдущие обращения</h2>
+            </div>
+            {% for appeal in current.appeal.all %}
+            {% if appeal.status == 'n' %}
+             <ul class="list-group list-group-flush">
+                <a href="{% url 'appeal_current' appeal.id %}?id={{current.id}}"
+                   class="list-group-item">{{ appeal }} </a>
+             </ul>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Активные заявки</h2>
+            </div>
+            {% for appeal in current.appeal.all %}
+            {% for app in appeal.app.all %}
+            {% if app.status != 'c' %}
+             <ul class="list-group list-group-flush">
+                <a href="{% url 'app_current' app.id %}?id={{current.id}}"
+                   class="list-group-item">{{ app }} </a>
+             </ul>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Коммерческие предложения</h2>
+            </div>
+            {% for contract in current.contract.all %}
+            {% for offer in contract.offer.all %}
+             <ul class="list-group list-group-flush">
+                <a href="{% url 'offer_current' offer.id %}?id={{current.id}}"
+                   class="list-group-item">{{ offer }} </a>
+             </ul>
+            {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'update_profile' current.id %}">Обновить профиль
+            контрагента</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'update_user' current.id %}">Обновить данные
+            представителя организации</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'update_org' current.id %}">Обновить данные
+            организации</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'update_address' current.id %}">Обновить данные
+            адреса</a>
+        <a class="btn btn-danger" role="button"
+           href="{% url 'delete_profile' current.id %}">Удалить профиль
+            контрагента</a>
+    </div>
+</div>
+
+{% endblock %}

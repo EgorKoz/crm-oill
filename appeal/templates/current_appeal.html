@@ -1,0 +1,46 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+<div class="col-md-2">
+    {% if agent_id %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'current_agent' agent_id %}">Назад</a>
+    {% else %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'appeal' %}">Назад</a>
+    {% endif %}
+</div>
+<div class="col-md-8">
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Обращение№{{ current.id }}</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Контрагент: {{ current.client }}</li>
+                <li class="list-group-item">Название: {{ current.name }}</li>
+                <li class="list-group-item">Тема: {{ current.get_topic_display }}</li>
+                <li class="list-group-item">Канал поступления: {{ current.get_channel_display }}</li>
+                <li class="list-group-item">Договор: {{ current.contract|default:"" }}</li>
+                <li class="list-group-item">Комментарий: {{ current.comment }}</li>
+                <li class="list-group-item">Создан: {{ current.created_by }}</li>
+                <li class="list-group-item">Дата создания: {{ current.created_on }}</li>
+                <li class="list-group-item">Срок обработки: {{ current.closed_on }}</li>
+                <li class="list-group-item">Статус: {{ current.get_status_display }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'app_create' %}?id={{current.id}} ">Создать заявку</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'appeal_update' current.id %}">Обновить обращение</a>
+        <a class="btn btn-danger" role="button"
+           href="{% url 'appeal_delete' current.id %}">Удалить обращение</a>
+    </div>
+</div>
+
+{% endblock %}

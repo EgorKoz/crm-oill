@@ -1,0 +1,68 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+<div class="col-md-2">
+    {% if agent_id %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'current_agent' agent_id %}">Назад</a>
+    {% else %}
+    <a class="btn btn-dark" role="button"
+       href="{% url 'applications' %}">Назад</a>
+    {% endif %}
+</div>
+<div class="col-md-8">
+    <div class="list-group">
+        <div class="card">
+            <div class="card-header">
+                <h2>Заявка№{{ current.id }}</h2>
+            </div>
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item">Обращение: {{ current.appeal }}</li>
+                <li class="list-group-item">Контрагент: {{ current.appeal.client }}</li>
+                <li class="list-group-item">Договор: {{ current.appeal.contract|default:"" }}</li>
+                {% if current.appeal.contract.file %}
+                <li class="list-group-item">Файл договора: <a href="{{ current.appeal.contract.file.url }}" download>
+                    {{ current.appeal.contract.file|default:'' }}
+                </a></li>
+                {% else %}
+                <li class="list-group-item">Файл договора:</li>
+                {% endif %}
+                <li class="list-group-item">Тема: {{ current.appeal.get_topic_display }}</li>
+                <li class="list-group-item">Приоритет: {{ current.get_priority_display }}</li>
+                <li class="list-group-item">Создана: {{ current.created_on }}</li>
+                <li class="list-group-item">Отправлена клиенту:
+                    {{ current.send_on|default:"" }}</li>
+                <li class="list-group-item">Статус: {{ current.get_status_display }}</li>
+                {% if current.appeal.contract.services.all %}
+                <li class="list-group-item">Услуги:
+                   <ul> {% for srv in current.appeal.contract.services.all %} <li>{{ srv }}</li>
+                    {% endfor %}</ul>
+                </li>
+                {% else %}
+                <li class="list-group-item">Услуги:</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="btn-group-vertical">
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'app_update' current.id %}">Редактировать заявку</a>
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'app_send' current.id %}">Отправить контрагенту</a>
+        {% if current.status == 's' and not current.appeal.contract.offer %}
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'offer_create' %}?id={{current.id}}">Создать контракт</a>
+        {% endif %}
+        {% if current.appeal.contract.offer %}
+        <a class="btn btn-secondary" role="button"
+           href="{% url 'offer_current' current.appeal.contract.offer.id %}">
+            Перейти к контракту</a>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

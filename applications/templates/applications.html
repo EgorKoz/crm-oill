@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content_body %}
+
+{% if apps %}
+
+<div class="col-md-8">
+    <div class="list-group">
+        {% for app in apps %}
+        <a href="{% url 'app_current' app.id %}"
+           class="list-group-item list-group-item-action"
+           aria-current="true">
+            <h4><strong>Заявка№{{ app.id }}</strong></h4>
+            <p class="mb-1"><strong>Контрагент</strong>: {{ app.appeal.client }}</p>
+            <p class="mb-1"><strong>Тема</strong>: {{ app.appeal.get_topic_display }}</p>
+            <p class="mb-1"><strong>Дата создания</strong>: {{ app.created_on }}</p>
+            <p class="mb-1"><strong>Статус</strong>: {{ app.get_status_display }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}
